@@ -8,6 +8,8 @@ Description: This package could help you to calculate the multiple linear regres
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
+Imports:
+    stats
 Suggests: 
     covr,
     knitr,
@@ -16,5 +18,4 @@ Suggests:
 VignetteBuilder: knitr
 Config/testthat/edition: 3
 RoxygenNote: 7.2.3
-Imports:
-    stats
+

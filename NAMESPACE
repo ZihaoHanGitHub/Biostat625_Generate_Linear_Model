@@ -2,3 +2,4 @@
 
 export(generate_linear_model)
 export(get_pred)
+import(stats)

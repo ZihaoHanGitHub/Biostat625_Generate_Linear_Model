@@ -9,7 +9,7 @@
 #'@param data original dataset form users
 #'
 #'@return A coefficient table of this fitted linear model
-#'
+#'@import stats
 #'@examples
 #'df <- data.frame(Y = c(1, 2, 3, 4,7),X1 = c(2, 7, 4, 5,8),X2 = c(3, 4, 1, 6,2),X3 = c(4, 5, 6, 9,6))
 #'generate_linear_model(Y~X1+X2+X3,df)
@@ -21,11 +21,6 @@ generate_linear_model <- function(s,data){
     message <- "Error! You enter an not valid argument!"
     return(message)
   }else{
-    n <- nrow(df)
-    p <- ncol(df)
-    if(n-p>0){
-
-    }
     formula_object <- as.formula(s)
     response_variable <- as.character(formula_object[[2]])
     variables <- all.vars(formula_object)[-1]
