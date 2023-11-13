@@ -1,4 +1,4 @@
-Package: homework3.test
+Package: LinearModelGenerator
 Type: Package
 Title: A Linear Regression Model Generator
 Version: 0.1.0
