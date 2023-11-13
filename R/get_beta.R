@@ -1,6 +1,19 @@
-# Calculate the beta of Model
-# input: data
-# output: beta matrix
+#'@name get_beta
+#'
+#'@title Calculate Beta Matrix
+#'
+#'@description  From your dependent variable and response variable to calculate the beta matrix, or warning you that you input a dataset which is not full ranked
+#'
+#'@param data the dataset that is already selected by the other function
+#'
+#'
+#'@return Beta Matrix, which is a matrix contains beta_0,beta_1, and so on.
+#'
+#'@examples
+#'get_beta(data)
+#'
+#'@export
+#'
 get_beta <- function(data){
   X <- data[,-1]
   X <- cbind(1, X)

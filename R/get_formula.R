@@ -1,6 +1,19 @@
-#Get model formula expression
-# input: Model
-# ouput: Mathematics Model Formula
+#'@name get_formula
+#'
+#'@title Get the formula of your model
+#'
+#'@description From the main funciton generate coefficient table, to generate the mathematics formula of this model
+#'
+#'@param coefficient_table, A dataframe, with coefficient and dependent variables.
+#'
+#'@return A complete mathematics formula of the fitted linear model
+#'
+#'@examples
+#'model = generate_linear_model(Y~X1+X2+X3,data)
+#'get_formula(model)
+#'
+#'@export
+#'
 get_formula <- function(model){
   beta <- model$Coefficients
   X <- model$Variable

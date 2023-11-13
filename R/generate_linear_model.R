@@ -1,3 +1,20 @@
+#'@name generate_linear_model
+#'
+#'@title Generate the Linear Model
+#'
+#'@description  The Main function of this package, it would calculate the fitted (Least Square Estimate) Linear Model from your argument and dataset
+#'
+#'@param s A argument of your model, which is a formula of your function about response variable and dependent variable
+#'
+#'@param data original dataset form users
+#'
+#'@return A coefficient table of this fitted linear model
+#'
+#'@examples
+#'generate_linear_model(Y~X1+X2+X3,data)
+#'
+#'@export
+#'
 source("R/get_depen_var.R")
 source("R/deter_depen_var.R")
 source("R/na_test.R")
@@ -5,9 +22,6 @@ source("R/get_beta.R")
 source("R/get_coefficient_table.R")
 source("R/get_formula.R")
 source("R/get_pred.R")
-# Main function of calculate model
-# input: string(s), and data
-# output: Model expression
 generate_linear_model <- function(s,data){
   if(s == ""){
     message <- "Error! You enter an not valid argument!"
