@@ -16,3 +16,5 @@ Suggests:
 VignetteBuilder: knitr
 Config/testthat/edition: 3
 RoxygenNote: 7.2.3
+Imports:
+    stats

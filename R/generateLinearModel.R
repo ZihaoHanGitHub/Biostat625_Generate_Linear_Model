@@ -11,7 +11,7 @@
 #'@return A coefficient table of this fitted linear model
 #'
 #'@examples
-#'df <- data.frame(Y = c(1, 2, 3, 4),X1 = c(2, 7, 4, 5),X2 = c(3, 4, 1, 6),X3 = c(4, 5, 6, 9))
+#'df <- data.frame(Y = c(1, 2, 3, 4,7),X1 = c(2, 7, 4, 5,8),X2 = c(3, 4, 1, 6,2),X3 = c(4, 5, 6, 9,6))
 #'generate_linear_model(Y~X1+X2+X3,df)
 #'
 #'@export
@@ -31,7 +31,7 @@ generate_linear_model <- function(s,data){
     variables <- all.vars(formula_object)[-1]
     variable_vector <- c(response_variable,as.character(variables))
     if(all(variable_vector %in% names(data))){
-      df = na_test( variable_vector , data )
+      df = data[,variable_vector]
       if(sum(is.na(df))==0){
         n <- nrow(df)
         p <- ncol(df)
@@ -45,7 +45,6 @@ generate_linear_model <- function(s,data){
         Y <- df[,1]
         Y <- as.matrix(Y)
         SSX <- t(X)%*%X
-        assign("my_global_variable", SSX, envir = .GlobalEnv)
         if(det(SSX)==0){
           stop("Error!Check your dependent Variable, it is not full rank!")
         }else{
@@ -59,7 +58,7 @@ generate_linear_model <- function(s,data){
         X_name <- c(('Intercept'),X_name)
 
         #Comput the T-test
-        Res <- Y_matrix-X_matrix%*%beta_matrix
+        Res <- Y-X%*%beta_matrix
         SSE <- t(Res)%*%Res
         sigma_squared <- SSE/dfE
         se_beta <- sqrt(diag(inverse_SSX)*c(sigma_squared))
@@ -84,7 +83,7 @@ generate_linear_model <- function(s,data){
             coefficient_table[i, "Significance"] = "***"
           }
         }
-        SSY <- t(Y_matrix)%*%Y_matrix
+        SSY <- t(Y)%*%Y
         R_sq <- 1 - SSE/SSY
         adj_R_sq <- 1 - (sigma_squared)/(SSY/(n-1))
         Rsquared_table <- data.frame(
