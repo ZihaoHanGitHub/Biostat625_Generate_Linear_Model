@@ -5,7 +5,7 @@ Version: 0.1.0
 Author: Zihao Han
 Maintainer: Zihao Han <zihaohan@umich.edu>
 Description: This package could help you to calculate the multiple linear regresison.
-License: MIT
+License: GPL-3
 Encoding: UTF-8
 LazyData: true
 Suggests: 
