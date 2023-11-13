@@ -9,7 +9,6 @@
 #'@return A complete mathematics formula of the fitted linear model
 #'
 #'@examples
-#'model = generate_linear_model(Y~X1+X2+X3,data)
 #'get_formula(model)
 #'
 #'@export

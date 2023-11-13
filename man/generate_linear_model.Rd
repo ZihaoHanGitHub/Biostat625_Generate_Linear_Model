@@ -3,6 +3,9 @@
 \name{generate_linear_model}
 \alias{generate_linear_model}
 \title{Generate the Linear Model}
+\usage{
+generate_linear_model(s, data)
+}
 \arguments{
 \item{s}{A argument of your model, which is a formula of your function about response variable and dependent variable}
 

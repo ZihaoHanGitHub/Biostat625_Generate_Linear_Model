@@ -11,7 +11,6 @@
 #'@return A vector of response variable value corresponding to each new data point.
 #'
 #'@examples
-#'model = generate_linear_model(Y~X1+X2+X3,data)
 #'new_X <- data.frame(X1 = c(1, 2, 3), X2 = c(4, 5, 6), X3 = c(7, 8, 9))
 #'get_pred(model,new_X)
 #'

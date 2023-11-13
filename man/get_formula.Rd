@@ -16,7 +16,6 @@ A complete mathematics formula of the fitted linear model
 From the main funciton generate coefficient table, to generate the mathematics formula of this model
 }
 \examples{
-model = generate_linear_model(Y~X1+X2+X3,data)
 get_formula(model)
 
 }

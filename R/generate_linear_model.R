@@ -15,13 +15,6 @@
 #'
 #'@export
 #'
-source("R/get_depen_var.R")
-source("R/deter_depen_var.R")
-source("R/na_test.R")
-source("R/get_beta.R")
-source("R/get_coefficient_table.R")
-source("R/get_formula.R")
-source("R/get_pred.R")
 generate_linear_model <- function(s,data){
   if(s == ""){
     message <- "Error! You enter an not valid argument!"

@@ -18,8 +18,6 @@ TRUE or Error Message
 Check if the response variable and dependent variables could be find in
 }
 \examples{
-variable_vector = c("Y","X1","X2")
-colnames( dataset )= "Y"  "X1" "X2" "X3"
-square(variable_vector,dataset)
+deter_depen_var(variable_vector,dataset)
 
 }

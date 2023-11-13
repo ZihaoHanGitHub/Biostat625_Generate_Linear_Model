@@ -11,7 +11,6 @@
 #'@return A complete dataset with the variables selected, or an error that the dataset contains N.A
 #'
 #'@examples
-#'variable_vector <- get_depend_var(s)
 #'data <- na_test(variable_vector,data)
 #'
 #'@export

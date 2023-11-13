@@ -18,7 +18,6 @@ A complete dataset with the variables selected, or an error that the dataset con
 From the variable of your select from the input of argument, check if there is N.A in the data set of variable interested, and also return the data set of variable intereseted
 }
 \examples{
-variable_vector <- get_depend_var(s)
 data <- na_test(variable_vector,data)
 
 }
