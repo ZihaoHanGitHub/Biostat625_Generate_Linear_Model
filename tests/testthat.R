@@ -7,6 +7,6 @@
 # * https://testthat.r-lib.org/reference/test_package.html#special-files
 
 library(testthat)
-library(homework3.test)
+library(LinearModelGenerator)
 
-test_check("homework3.test")
+test_check("LinearModelGenerator")

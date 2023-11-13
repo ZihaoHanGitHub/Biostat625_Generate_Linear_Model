@@ -4,11 +4,12 @@
 #'
 #'@description From the main funciton generate coefficient table, to generate the mathematics formula of this model
 #'
-#'@param coefficient_table, A dataframe, with coefficient and dependent variables.
+#'@param model A dataframe, with coefficient and dependent variables.
 #'
 #'@return A complete mathematics formula of the fitted linear model
 #'
 #'@examples
+#'model <- data.frame(Coefficients = c(-1,1,2,3),Variable = c("Intercept", "X1", "X2", "X3"))
 #'get_formula(model)
 #'
 #'@export

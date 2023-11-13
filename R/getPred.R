@@ -12,6 +12,7 @@
 #'
 #'@examples
 #'new_X <- data.frame(X1 = c(1, 2, 3), X2 = c(4, 5, 6), X3 = c(7, 8, 9))
+#'model <- data.frame(Coefficients = c(-1,1,2,3),Variable = c("Intercept", "X1", "X2", "X3"))
 #'get_pred(model,new_X)
 #'
 #'@export
