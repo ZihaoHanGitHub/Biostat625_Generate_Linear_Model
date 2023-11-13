@@ -1,8 +1,8 @@
 ---
-title: "LinearModelGeneratorTutorial"
+title: "LinearModelGenerator"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{LinearModelGeneratorTutorial}
+  %\VignetteIndexEntry{LinearModelGenerator}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
