@@ -12,13 +12,37 @@ generate_linear_model(s, data)
 \item{data}{original dataset form users}
 }
 \value{
-A coefficient table of this fitted linear model
+A coefficient table of this fitted linear model, including the coefficient value, stand error, t test value and p value corresponding to each variable.
+
+A Mathematics formula of your fitted linear model
+
+A R squared table for the fitted model, including R square and adjusted R squared
+
+A Sum of Square table, mainly including the SSR, SSE, and SSY, also the degree of freedom and MSR,MSE,MSY respectively.
+
+A F table, which is F test, including the F-statistics and p-value, and the degree of freedom
+
+A confident interval table, which includes the confident interval (95%CI) for each coefficient.
 }
 \description{
-The Main function of this package, it would calculate the fitted (Least Square Estimate) Linear Model from your argument and dataset
+The Main function of this package, it would calculate the fitted (Least Square Estimate) Linear Model from your argument and dataset,
+in the calculation, it applied the matrix operator to estimate the coefficients and several tests, in the end, this function return a comprehensive dataframe,
+you can the return part to understand each frame is, and in examples you can understand how to export each frame, also, you can see the tutorial to know it deeper!
 }
 \examples{
 df <- data.frame(Y = c(1, 2, 3, 4,7),X1 = c(2, 7, 4, 5,8),X2 = c(3, 4, 1, 6,2),X3 = c(4, 5, 6, 9,6))
-generate_linear_model(Y~X1+X2+X3,df)
+model = generate_linear_model(Y~X1+X2+X3,df)
+#call the coefficient table
+coefficient_table = model$coefficients_table
+#call the mathematics formula
+formula = model$Mathematics_formula
+#call the R Squared table
+R_squared_table = model$Rsquared_table
+#call the Sum of Square table
+SS_table = model$SS_table
+#call the F_table
+F_table = model$F_table
+#call the confident interval
+CI = model$confident_interval
 
 }

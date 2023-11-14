@@ -2,66 +2,85 @@
 #'
 #'@title Generate the Linear Model
 #'
-#'@description  The Main function of this package, it would calculate the fitted (Least Square Estimate) Linear Model from your argument and dataset
+#'@description  The Main function of this package, it would calculate the fitted (Least Square Estimate) Linear Model from your argument and dataset,
+#'in the calculation, it applied the matrix operator to estimate the coefficients and several tests, in the end, this function return a comprehensive dataframe,
+#'you can the return part to understand each frame is, and in examples you can understand how to export each frame, also, you can see the tutorial to know it deeper!
 #'
 #'@param s A argument of your model, which is a formula of your function about response variable and dependent variable
 #'
 #'@param data original dataset form users
 #'
-#'@return A coefficient table of this fitted linear model
+#'@return A coefficient table of this fitted linear model, including the coefficient value, stand error, t test value and p value corresponding to each variable.
+#'@return A Mathematics formula of your fitted linear model
+#'@return A R squared table for the fitted model, including R square and adjusted R squared
+#'@return A Sum of Square table, mainly including the SSR, SSE, and SSY, also the degree of freedom and MSR,MSE,MSY respectively.
+#'@return A F table, which is F test, including the F-statistics and p-value, and the degree of freedom
+#'@return A confident interval table, which includes the confident interval (95%CI) for each coefficient.
+#'
 #'@import stats
 #'@examples
 #'df <- data.frame(Y = c(1, 2, 3, 4,7),X1 = c(2, 7, 4, 5,8),X2 = c(3, 4, 1, 6,2),X3 = c(4, 5, 6, 9,6))
-#'generate_linear_model(Y~X1+X2+X3,df)
+#'model = generate_linear_model(Y~X1+X2+X3,df)
+#'#call the coefficient table
+#'coefficient_table = model$coefficients_table
+#'#call the mathematics formula
+#'formula = model$Mathematics_formula
+#'#call the R Squared table
+#'R_squared_table = model$Rsquared_table
+#'#call the Sum of Square table
+#'SS_table = model$SS_table
+#'#call the F_table
+#'F_table = model$F_table
+#'#call the confident interval
+#'CI = model$confident_interval
 #'
 #'@export
 #'
 generate_linear_model <- function(s,data){
   if(s == " "){
-    message <- "Error! You enter an not valid argument!"
+    message = "Error! You enter an not valid argument!"
     return(message)
   }else{
-    formula_object <- as.formula(s)
-    response_variable <- as.character(formula_object[[2]])
-    variables <- all.vars(formula_object)[-1]
-    variable_vector <- c(response_variable,as.character(variables))
+    formula_object = as.formula(s)
+    response_variable = as.character(formula_object[[2]])
+    variables = all.vars(formula_object)[-1]
+    variable_vector = c(response_variable,as.character(variables))
     if(all(variable_vector %in% names(data))){
       df = data[,variable_vector]
       if(sum(is.na(df))==0){
-        n <- nrow(df)
-        p <- ncol(df)
-        dfE <- n-p
+        n = nrow(df)
+        p = ncol(df)
+        dfE = n-p
         if(dfE < 0){
           stop("Error!The data rows is not enough to calculate the parameter!")
         }
-        X <- df[,-1]
-        X <- cbind(1, X)
-        X <- as.matrix(X)
-        Y <- df[,1]
-        Y <- as.matrix(Y)
-        SSX <- t(X)%*%X
+        X = df[,-1]
+        X = cbind(intercept = 1, X)
+        X = as.matrix(X)
+        Y = df[,1]
+        Y = as.matrix(Y)
+        SSX = t(X)%*%X
         if(det(SSX)==0){
           stop("Error!Check your dependent Variable, it is not full rank!")
         }else{
-          inverse_SSX <- solve(SSX)
-          beta_matrix <- (inverse_SSX)%*%t(X)%*%Y
+          inverse_SSX = solve(SSX)
+          beta_matrix = (inverse_SSX)%*%t(X)%*%Y
         }
-        rounded_beta_matrix <- round(beta_matrix, digits = 5)
-        Y_name <- variable_vector[1]
-        X_name <- variable_vector[-1]
+        rounded_beta_matrix = round(beta_matrix, digits = 5)
+        Y_name = variable_vector[1]
+        X_name = variable_vector[-1]
         #coefficients <- data.frame()
-        X_name <- c(('Intercept'),X_name)
+        X_name = c(('Intercept'),X_name)
 
         #Comput the T-test
-        Res <- Y-X%*%beta_matrix
-        SSE <- t(Res)%*%Res
-        sigma_squared <- SSE/dfE
-        se_beta <- sqrt(diag(inverse_SSX)*c(sigma_squared))
-        t_statistics <- beta_matrix / se_beta
-        p_values <- 2 * pt(abs(t_statistics), df = dfE, lower.tail = FALSE)
-        coefficient_table <- data.frame(
+        Res = Y-X%*%beta_matrix
+        SSE = t(Res)%*%Res
+        sigma_squared = SSE/dfE
+        se_beta = sqrt(diag(inverse_SSX)*c(sigma_squared))
+        t_statistics = beta_matrix / se_beta
+        p_values = 2 * pt(abs(t_statistics), df = dfE, lower.tail = FALSE)
+        coefficient_table = data.frame(
           Coefficients = rounded_beta_matrix,
-          Variable = X_name,
           t_value = t_statistics,
           p_value = p_values
         )
@@ -78,27 +97,43 @@ generate_linear_model <- function(s,data){
             coefficient_table[i, "Significance"] = "***"
           }
         }
-        SSY <- t(Y)%*%Y
-        R_sq <- 1 - SSE/SSY
-        adj_R_sq <- 1 - (sigma_squared)/(SSY/(n-1))
-        Rsquared_table <- data.frame(
+        Y_mean = mean(Y)
+        SSY = t(Y-Y_mean)%*%(Y-Y_mean)
+        R_sq = 1 - SSE/SSY
+        adj_R_sq = 1 - (sigma_squared)/(SSY/(n-1))
+        Rsquared_table = data.frame(
           R_squared = R_sq,
           Adjusted_R_squared = adj_R_sq
         )
         SSR = SSY - SSE
         dfR = (p-1)
         F_statistics = (SSR/dfR)/(sigma_squared)
-        p_value <- 1 - pf(F_statistics, df1 = dfR, df2 = dfE)
-        F_table <- data.frame(
+        p_value = 1 - pf(F_statistics, df1 = dfR, df2 = dfE)
+        F_table = data.frame(
           F_statistics = F_statistics,
-          p_value = p_value
+          p_value = p_value,
+          df1 = dfR,
+          df2 = dfE
         )
-        X_name_formula <- variable_vector[-1]
-        beta0 <- rounded_beta_matrix[1]
-        beta <- rounded_beta_matrix[-1]
-        formula_string <- paste(Y_name, "~", beta0,"+",
-                                paste0(beta, "*", X_name_formula, collapse = " + "))
-        model_express <- as.formula(formula_string)
+        dfY = dfR+dfE
+        anova_table = data.frame(
+          Row = c("Regression", "Error", "Total"),
+          SS = c(SSR,SSE,SSY),
+          df = c(dfR,dfE,dfY),
+          MS = c(SSR/dfR,SSE/dfE,SSY/dfY)
+        )
+        X_name_formula = variable_vector[-1]
+        beta0 = rounded_beta_matrix[1]
+        beta = rounded_beta_matrix[-1]
+        formula_string = paste(Y_name, "~", beta0,"+",
+                               paste0(beta, "*", X_name_formula, collapse = " + "))
+        model_express = as.formula(formula_string)
+        confident_interval_lower = beta_matrix - 1.96*se_beta
+        confident_interval_upper = beta_matrix + 1.96*se_beta
+        confident_interval = data.frame(
+          confident_interval_lower = confident_interval_lower,
+          confident_interval_upper = confident_interval_upper
+        )
       }else{
         stop("Error! Your dataset contains N.A!")
       }
@@ -110,8 +145,9 @@ generate_linear_model <- function(s,data){
     Mathematics_formula = model_express,
     coefficients_table =coefficient_table,
     Rsquared_table= Rsquared_table,
-    F_table = F_table
+    SS_table = anova_table,
+    F_table = F_table,
+    confident_interval = confident_interval
   )
   return(result)
 }
-
