@@ -52,7 +52,8 @@ generate_linear_model <- function(s,data){
         p = ncol(df)
         dfE = n-p
         if(dfE < 0){
-          stop("Error!The data rows is not enough to calculate the parameter!")
+          message = "Error!The data rows is not enough to calculate the parameter!"
+          return(message)
         }
         X = df[,-1]
         X = cbind(intercept = 1, X)
@@ -61,7 +62,9 @@ generate_linear_model <- function(s,data){
         Y = as.matrix(Y)
         SSX = t(X)%*%X
         if(det(SSX)==0){
-          stop("Error!Check your dependent Variable, it is not full rank!")
+          message = "Error!Check your dependent Variable, it is not full rank!"
+          return(message)
+          #stop("Error!Check your dependent Variable, it is not full rank!")
         }else{
           inverse_SSX = solve(SSX)
           beta_matrix = (inverse_SSX)%*%t(X)%*%Y
@@ -145,10 +148,14 @@ generate_linear_model <- function(s,data){
         rownames(confident_interval)= c('(Intercept)', 'Age', 'Sex', 'Fatalism')
 
       }else{
-        stop("Error! Your dataset contains N.A!")
+        message = "Error! Your dataset contains N.A!"
+        return(message)
+        #stop("Error! Your dataset contains N.A!")
       }
     }else{
-      stop("Error: Not all variables in variable_vector are present in the data.")
+      message = "Error: Not all variables in variable_vector are present in the data."
+      return(message)
+      #stop("Error: Not all variables in variable_vector are present in the data.")
     }
   }
   result <- list(

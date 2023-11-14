@@ -68,5 +68,47 @@ test_that("Main Function Work", {
   expect_equal(lower_bond, as.matrix(lower_true))
   expect_equal(upper_bond, as.matrix(upper_true))
 
+
+
+
+  # test special cases,
+  #empty formula
+  warning = generate_linear_model(" ",dataset)
+  expect_equal(warning,"Error! You enter an not valid argument!")
+  #check n-p (dfE)
+  # generate a data.frame of 1*3
+  wrongdata = data.frame(
+    Y=c(1),
+    X1=c(2),
+    X2=c(5)
+  )
+  warning = generate_linear_model(Y~X1+X2,wrongdata)
+  expect_equal(warning, "Error!The data rows is not enough to calculate the parameter!")
+  # check full rank
+  #generate a data frame of not funn rank
+  wrongdata = data.frame(
+    Y=c(1,2,3,4,5,6),
+    X1=c(1,1,1,1,1,1),
+    X2=c(1,1,1,1,1,1)
+  )
+  warning = generate_linear_model(Y~X1+X2,wrongdata)
+  expect_equal(warning,"Error!Check your dependent Variable, it is not full rank!")
+  #check N.A in dataset
+  #generate a dataset contains N.A
+  wrongdata <- data.frame(
+    Y = c(1, 2, 3, NA, 5, 6),
+    X1 = c(4, 1, 1, 2, 4, 1),
+    X2 = c(1, 9, 1, 1, 5, 1)
+  )
+  warning = generate_linear_model(Y~X1+X2,wrongdata)
+  expect_equal(warning,"Error! Your dataset contains N.A!")
+  #check all the variables contain in dataset
+  wrongdata <- data.frame(
+    Y = c(1, 2, 3, 0, 5, 6),
+    X1 = c(4, 1, 1, 2, 4, 1),
+    X2 = c(1, 9, 1, 1, 5, 1)
+  )
+  warning = generate_linear_model(Y~X1+X2+X3,wrongdata)
+  expect_equal(warning,"Error: Not all variables in variable_vector are present in the data.")
 })
 
