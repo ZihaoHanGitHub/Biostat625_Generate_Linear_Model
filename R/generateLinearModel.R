@@ -19,8 +19,8 @@
 #'
 #'@import stats
 #'@examples
-#'dateset = LinearModelGenerator::data
-#'model = generate_linear_model(Depression~Age+Sex+Fatalism,dateset)
+#'dataset = LinearModelGenerator::data
+#'model = generate_linear_model(Depression~Age+Sex+Fatalism,dataset)
 #'#call the coefficient table
 #'coefficient_table = model$coefficients_table
 #'#call the mathematics formula

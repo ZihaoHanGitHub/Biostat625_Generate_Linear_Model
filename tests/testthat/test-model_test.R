@@ -47,7 +47,6 @@ test_that("Main Function Work", {
   f_test_result <- anova(model_lm)
   p_value_true <- f_test_result$"Pr(>F)"[1]
   expect_equal(F_table_sub, F_table_true)
-  #expect_equal(p_value, p_value_true)
 
   # confident_interval tetst
   CI = model_package$confident_interval
