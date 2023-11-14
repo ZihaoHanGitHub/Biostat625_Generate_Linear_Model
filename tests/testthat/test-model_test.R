@@ -126,6 +126,10 @@ test_that("Main Function Work", {
   expect_equal(significance,Significant_true)
 
   #continue test significance
-
+  model_sigtest1 = generate_linear_model(Age~Depression+Fatalism,data)
+  coefficients_table = model_sigtest1$coefficients_table
+  significance = coefficients_table$Significance
+  Significant_true <- c("***","***","**")
+  expect_equal(significance,Significant_true)
 })
 
