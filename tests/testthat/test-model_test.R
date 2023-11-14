@@ -110,5 +110,22 @@ test_that("Main Function Work", {
   )
   warning = generate_linear_model(Y~X1+X2+X3,wrongdata)
   expect_equal(warning,"Error: Not all variables in variable_vector are present in the data.")
+
+  # continue test significance
+  model_sigtest1 = generate_linear_model(Depression~Sex,data=data)
+  coefficients_table = model_sigtest1$coefficients_table
+  significance = coefficients_table$Significance
+  Significant_true <- c("***",".")
+  expect_equal(significance,Significant_true)
+
+  #continue test significance
+  model_sigtest1 = generate_linear_model(Sex~ Fatalism, data)
+  coefficients_table = model_sigtest1$coefficients_table
+  significance = coefficients_table$Significance
+  Significant_true <- c("***","*")
+  expect_equal(significance,Significant_true)
+
+  #continue test significance
+
 })
 

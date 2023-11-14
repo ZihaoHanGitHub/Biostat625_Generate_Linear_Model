@@ -145,7 +145,7 @@ generate_linear_model <- function(s,data){
           confident_interval_upper = confident_interval_upper
         )
         #confident_interval = as.matrix(confident_interval)
-        rownames(confident_interval)= c('(Intercept)', 'Age', 'Sex', 'Fatalism')
+        rownames(confident_interval)= X_name
 
       }else{
         message = "Error! Your dataset contains N.A!"
