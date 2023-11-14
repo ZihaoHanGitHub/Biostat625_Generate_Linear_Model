@@ -8,6 +8,7 @@ Description: This package could help you to calculate the multiple linear regres
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
+Data: Depression
 Imports:
     stats
 Suggests: 
