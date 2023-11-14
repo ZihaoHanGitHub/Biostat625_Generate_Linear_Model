@@ -66,55 +66,48 @@ generate_linear_model <- function(s,data){
           inverse_SSX = solve(SSX)
           beta_matrix = (inverse_SSX)%*%t(X)%*%Y
         }
-        rounded_beta_matrix = round(beta_matrix, digits = 5)
         Y_name = variable_vector[1]
         X_name = variable_vector[-1]
         #coefficients <- data.frame()
-        X_name = c(('Intercept'),X_name)
+        X_name = c(('(Intercept)'),X_name)
 
         #Comput the T-test
         Res = Y-X%*%beta_matrix
         SSE = t(Res)%*%Res
-        sigma_squared = SSE/dfE
-        se_beta = sqrt(diag(inverse_SSX)*c(sigma_squared))
+        MSE = SSE/dfE
+        se_beta = sqrt(diag(inverse_SSX)*c(MSE))
         t_statistics = beta_matrix / se_beta
         p_values = 2 * pt(abs(t_statistics), df = dfE, lower.tail = FALSE)
+        #c("Estimate","Std. Error","t value","Pr(>|t|)")
         coefficient_table = data.frame(
-          Coefficients = rounded_beta_matrix,
-          t_value = t_statistics,
-          p_value = p_values
+          beta_matrix,
+          se_beta,
+          t_statistics,
+          p_values
         )
-        for (i in 1:p) {
-          if (coefficient_table[i, "p_value"] >= 0.1) {
-            coefficient_table[i, "Significance"] = "  "
-          } else if (coefficient_table[i, "p_value"] >= 0.05) {
-            coefficient_table[i, "Significance"] = "."
-          } else if (coefficient_table[i, "p_value"] > 0.01) {
-            coefficient_table[i, "Significance"] = "*"
-          } else if (coefficient_table[i, "p_value"] > 0.001) {
-            coefficient_table[i, "Significance"] = "**"
-          } else {
-            coefficient_table[i, "Significance"] = "***"
-          }
-        }
+        coefficient_table = as.matrix(coefficient_table)
+        colnames(coefficient_table) = c("Estimate","Std. Error", "t value", "Pr(>|t|)")
+        rownames(coefficient_table) = X_name
         Y_mean = mean(Y)
         SSY = t(Y-Y_mean)%*%(Y-Y_mean)
         R_sq = 1 - SSE/SSY
-        adj_R_sq = 1 - (sigma_squared)/(SSY/(n-1))
+        adj_R_sq = 1 - (MSE)/(SSY/(n-1))
         Rsquared_table = data.frame(
           R_squared = R_sq,
           Adjusted_R_squared = adj_R_sq
         )
         SSR = SSY - SSE
         dfR = (p-1)
-        F_statistics = (SSR/dfR)/(sigma_squared)
+        F_statistics = (SSR/dfR)/(MSE)
         p_value = 1 - pf(F_statistics, df1 = dfR, df2 = dfE)
         F_table = data.frame(
-          F_statistics = F_statistics,
-          p_value = p_value,
-          df1 = dfR,
-          df2 = dfE
+          F_statistics,
+          dfR,
+          dfE,
+          p_value
         )
+        F_table = as.matrix(F_table)
+        colnames(F_table) = c("value","numdf","dendf","p_value")
         dfY = dfR+dfE
         anova_table = data.frame(
           Row = c("Regression", "Error", "Total"),
@@ -123,17 +116,21 @@ generate_linear_model <- function(s,data){
           MS = c(SSR/dfR,SSE/dfE,SSY/dfY)
         )
         X_name_formula = variable_vector[-1]
-        beta0 = rounded_beta_matrix[1]
-        beta = rounded_beta_matrix[-1]
+        beta0 = beta_matrix[1]
+        beta = beta_matrix[-1]
         formula_string = paste(Y_name, "~", beta0,"+",
                                paste0(beta, "*", X_name_formula, collapse = " + "))
         model_express = as.formula(formula_string)
-        confident_interval_lower = beta_matrix - 1.96*se_beta
-        confident_interval_upper = beta_matrix + 1.96*se_beta
+        t_95ci = qt(0.975, df = dfE)
+        confident_interval_lower = beta_matrix - t_95ci*se_beta
+        confident_interval_upper = beta_matrix + t_95ci*se_beta
         confident_interval = data.frame(
           confident_interval_lower = confident_interval_lower,
           confident_interval_upper = confident_interval_upper
         )
+        confident_interval = as.matrix(confident_interval)
+        rownames(confident_interval)= c('(Intercept)', 'Age', 'Sex', 'Fatalism')
+
       }else{
         stop("Error! Your dataset contains N.A!")
       }
