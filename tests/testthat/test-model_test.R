@@ -6,8 +6,12 @@ test_that("Main Function Work", {
   model_lm = lm(Depression~Age+Sex+Fatalism,dataset)
   summary_lm = summary(model_lm)
   coefficient_table = model_package$coefficients_table
-  expect_equal(coefficient_table, summary_lm$coefficients)
-
+  coefficients = coefficient_table[,c("Estimate","Std. Error", "t value", "Pr(>|t|)")]
+  coefficients = as.matrix(coefficients)
+  Significant = coefficient_table[,"Significance"]
+  Significant_true <- c("***","***","  ","***")
+  expect_equal(coefficients, summary_lm$coefficients)
+  expect_equal(Significant, Significant_true)
   # Rsquared_table test
   R_squared_table = model_package$Rsquared_table
   R_squared_package = R_squared_table$R_squared
@@ -41,12 +45,14 @@ test_that("Main Function Work", {
   # F table check
   F_table = model_package$F_table
   F_table_sub = F_table[,c("value","numdf","dendf")]
+  F_table_sub = as.matrix(F_table_sub)
+  #F_table_sub = as.matrix(F_table_sub)
   #F_statistics = F_table$F_statistics
   p_value = F_table[,"p_value"]
   F_table_true <- summary(model_lm)$fstatistic
   f_test_result <- anova(model_lm)
   p_value_true <- f_test_result$"Pr(>F)"[1]
-  expect_equal(F_table_sub, F_table_true)
+  expect_equal(t(F_table_sub), as.matrix(F_table_true))
 
   # confident_interval tetst
   CI = model_package$confident_interval
@@ -54,9 +60,13 @@ test_that("Main Function Work", {
   upper_bond = CI[, 2]
   conf_interval_true <- confint(model_lm)
   lower_true = conf_interval_true[, 1]
+  lower_bond = as.matrix(lower_bond)
+  upper_bond = as.matrix(upper_bond)
   upper_true = conf_interval_true[, 2]
-  expect_equal(lower_bond, lower_true)
-  expect_equal(upper_bond, upper_true)
+  rownames(lower_bond) = c("(Intercept)","Age","Sex","Fatalism")
+  rownames(upper_bond) = c("(Intercept)","Age","Sex","Fatalism")
+  expect_equal(lower_bond, as.matrix(lower_true))
+  expect_equal(upper_bond, as.matrix(upper_true))
 
 })
 

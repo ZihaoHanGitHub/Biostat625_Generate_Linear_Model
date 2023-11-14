@@ -85,8 +85,21 @@ generate_linear_model <- function(s,data){
           t_statistics,
           p_values
         )
-        coefficient_table = as.matrix(coefficient_table)
+        #coefficient_table = as.matrix(coefficient_table)
         colnames(coefficient_table) = c("Estimate","Std. Error", "t value", "Pr(>|t|)")
+        for (i in 1:p) {
+          if (coefficient_table[i, "Pr(>|t|)"] >= 0.1) {
+            coefficient_table[i, "Significance"] = "  "
+          } else if (coefficient_table[i, "Pr(>|t|)"] >= 0.05) {
+            coefficient_table[i, "Significance"] = "."
+          } else if (coefficient_table[i, "Pr(>|t|)"] > 0.01) {
+            coefficient_table[i, "Significance"] = "*"
+          } else if (coefficient_table[i, "Pr(>|t|)"] > 0.001) {
+            coefficient_table[i, "Significance"] = "**"
+          } else {
+            coefficient_table[i, "Significance"] = "***"
+          }
+        }
         rownames(coefficient_table) = X_name
         Y_mean = mean(Y)
         SSY = t(Y-Y_mean)%*%(Y-Y_mean)
@@ -99,14 +112,14 @@ generate_linear_model <- function(s,data){
         SSR = SSY - SSE
         dfR = (p-1)
         F_statistics = (SSR/dfR)/(MSE)
-        p_value = 1 - pf(F_statistics, df1 = dfR, df2 = dfE)
+        p_value = 1 - 2*pf(F_statistics, df1 = dfR, df2 = dfE)
         F_table = data.frame(
           F_statistics,
           dfR,
           dfE,
           p_value
         )
-        F_table = as.matrix(F_table)
+        #F_table = as.matrix(F_table)
         colnames(F_table) = c("value","numdf","dendf","p_value")
         dfY = dfR+dfE
         anova_table = data.frame(
@@ -128,7 +141,7 @@ generate_linear_model <- function(s,data){
           confident_interval_lower = confident_interval_lower,
           confident_interval_upper = confident_interval_upper
         )
-        confident_interval = as.matrix(confident_interval)
+        #confident_interval = as.matrix(confident_interval)
         rownames(confident_interval)= c('(Intercept)', 'Age', 'Sex', 'Fatalism')
 
       }else{
