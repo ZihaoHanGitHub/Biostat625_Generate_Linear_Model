@@ -30,8 +30,8 @@ in the calculation, it applied the matrix operator to estimate the coefficients 
 you can the return part to understand each frame is, and in examples you can understand how to export each frame, also, you can see the tutorial to know it deeper!
 }
 \examples{
-df <- data.frame(Y = c(1, 2, 3, 4,7),X1 = c(2, 7, 4, 5,8),X2 = c(3, 4, 1, 6,2),X3 = c(4, 5, 6, 9,6))
-model = generate_linear_model(Y~X1+X2+X3,df)
+dateset = LinearModelGenerator::data
+model = generate_linear_model(Depression~Age+Sex+Fatalism,dateset)
 #call the coefficient table
 coefficient_table = model$coefficients_table
 #call the mathematics formula
