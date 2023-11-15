@@ -71,7 +71,7 @@ And it is easily to call each colunms of coefficient table,
 Estimate = coefficient_table[,"Estimate"]
 Estimate
 ```
-\subsubsection{}
+\subsubsection{SS table, $R^2$table,& F-test table}
 
 
 
