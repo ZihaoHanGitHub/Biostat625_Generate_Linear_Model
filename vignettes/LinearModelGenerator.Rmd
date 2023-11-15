@@ -72,6 +72,37 @@ Estimate = coefficient_table[,"Estimate"]
 Estimate
 ```
 \subsubsection{SS table, $R^2$table,& F-test table}
+This part is introduce how to call the SS table, $R^2$ table and F-test table of the model, first, it is going to introduce the Sum Sq table, For Sum Sq table, you can applied this command
+```{r}
+# call out SS_table
+SS_table = model$SS_table
+SS_table
+```
+We could see it is a dataframe containing the SSE,dfE,MSE, and other two rows for Regression term and Y term. Next, it introduce how to call the R squared table, which is a dataframe contains the $R^2$ and $adj R^2$, for the $R^2$ table, you can run this code.
+```{r}
+R_table = model$Rsquared_table
+R_table
+```
+In the end of this section, it introduce how to call the F-test table, which is a dataframe contains the F-statistics, Degree of Freedom1, Degree of Freedom2, and also the p-value.
+```{r}
+F_table = model$F_table
+F_table
+```
+\subsubsection{Confidence Interval}
+This section is going to introduce about the 95%CI of each parameter, you can call out this dataframe by the code following:
+```{r}
+# CI is the dataframe type
+CI = model$confident_interval
+CI
+```
+You could see the upper bound and lower bound as teh columns name, and intercept and your dependent variables are the row names, therefore, as the dataframe type, you can save the upper bound or the confidence interval for the specific variable by following code:
+```{r}
+#Call the upper bound of 95% confidence interval
+CI[,"confident_interval_upper"]
+#Call the 95% confidence interval for intercept
+CI["(Intercept)",]
+```
+
 
 
 
