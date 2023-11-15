@@ -5,7 +5,8 @@
 
 <!-- badges: end -->
 This packages is design for the simple and multiple linear regression model, it contains a dataset about depression, a main functino to fit your model, a function to using your model that is fitted by the main function to predict or calculate on the new dataset.
-#Installation
+
+# Installation
 You can use the command of devtools and github link to install this packages,
 ```
 devtools::install_github(ZihaoHanGitHub/Biostat625_Generate_Linear_Model)
@@ -15,18 +16,25 @@ After the packages download, you can using the library to use this package!
 library(LinearModelGenerator)
 ```
 After the code complete, you can start to use this function!
-#GenerateLinearModel
+
+
+# GenerateLinearModel
 In this packages,it contains two function, and one dataset, this section is introduce the usage of these two functions, especially the input and output.
 generatorLinearModel is the functino help you to fitted your simple/multiple regression model by Least Squared Estimate.
-##INPUT:
-###S:
-A string, it is defined as a formula formatt, containing your response variable and dependent variables, example formatt:"Y~X1+X2+X3"
-###Dataset:
-A dataset containing all the variable you mentioned in your *S* (linear model formula), recommended do not containing *N.A*, and the length of each variable should be same.
-##OUTPUT
+
+## INPUT:
+You need two input to use this generateLinearModel, one is the formula of your model, and another is your dataset.
+
+*S:* A string, it is defined as a formula formatt, containing your response variable and dependent variables, example formatt:"Y~X1+X2+X3"
+
+*Dataset:* A dataset containing all the variable you mentioned in your *S* (linear model formula), recommended do not containing *N.A*, and the length of each variable should be same.
+
+## OUTPUT
 The function would return a data frame contain several information about your model.
+
 ### 0.Mathematics Formula:
 - *Mathematics express:* The model mathematics express.
+
 ### 1. Coefficient Table:
 - **Description:** Most of your model's coefficients are saved in this data frame.
 - **Estimate:** Parameter estimates obtained through the Least Squared Estimate.
@@ -57,17 +65,18 @@ The function would return a data frame contain several information about your mo
 - **Description:** DataFrame of 95% confidence intervals for each parameter.
 - **confident interval lower:** Lower bound of the 95% CI.
 - **confident interval upper:** Upper bound of the 95% CI.
-#get_pred
-This functino is help you to calculate the prediction or new dataset for the model you already fitted by the function aboved.
-##INPUT
-### Model:
-The model you fitted by the function generateLinearModel, directly input to get_pred function, you do not need to adjusted this input.
-###New Dataset:
-The dataset you want to caluclate or predict, containing all the dependents variables are needed.
 
-##OUTPUT:
-### Vector of new reponse variables:
-The functino would return a vector, which is the response variables calculated by the model and dataset you input to this model, each row corresponding to the original row of dataset.
+# get_pred
+
+This functino is help you to calculate the prediction or new dataset for the model you already fitted by the function aboved.
+
+## INPUT
+**Model:** The model you fitted by the function generateLinearModel, directly input to get_pred function, you do not need to adjusted this input.
+
+**New Dataset:** The dataset you want to caluclate or predict, containing all the dependents variables are needed.
+
+## OUTPUT:
+**Vector of new reponse variables:** The functino would return a vector, which is the response variables calculated by the model and dataset you input to this model, each row corresponding to the original row of dataset.
 
 # Example for Usage of this package
 First of all, you can use the dataset provided by the packages, this is a dataset about depression, with four vairbales, Depression, Age, Sex, and Fatalism
@@ -83,26 +92,53 @@ As the code finish running, you can call out every table you want,
 Call the coefficient table
 ```
 model$coefficients_table
+#OUTPUT:
+#>              Estimate Std. Error   t value     Pr(>|t|) Significance
+#>(Intercept)  6.9182011 1.28867178  5.368474 1.131279e-07          ***
+#>Age         -0.0916769 0.01688110 -5.430742 8.123599e-08          ***
+#>Sex          0.5423909 0.40843977  1.327958 1.846902e-01             
+#>Fatalism     0.2543792 0.03874823  6.564924 1.116938e-10          ***
 ```
 Call the the mathematics formula
 ```
 model$Mathematics_formula
+#OUTPUT:
+#>Depression ~ 6.91820106162983 + -0.091676895035151 * Age + 0.542390948941797 * 
+#>    Sex + 0.254379191284522 * Fatalism
+#><environment: 0x55d35ab4bd98>
 ```
 Call the R squared table
 ```
 model$Rsquared_table
+#OUTPUT:
+#>  R_squared Adjusted_R_squared
+#>1 0.1057742          0.1013619
 ```
 Call the Sum of Square Table
 ```
 model$SS_table
+#OUTPUT:
+#>         Row        SS  df        MS
+#>1 Regression  1815.915   3 605.30487
+#>2      Error 15351.922 608  25.24987
+#>3      Total 17167.837 611  28.09793
 ```
 Call the F-test Table
 ```
 model$F_table
+#OUTPUT:
+#>     value numdf dendf p_value
+#>1 23.97259     3   608      -1
 ```
 Call the 95% Confidence Interval
 ```
 model$confident_interval
+#OUTPUT:
+#>            confident_interval_lower confident_interval_upper
+#>(Intercept)                4.3874128               9.44898928
+#>Age                       -0.1248292              -0.05852455
+#>Sex                       -0.2597331               1.34451495
+#>Fatalism                   0.1782826               0.33047581
 ```
 This is all of the output inside the generateLinearModel functino return, and next is the usage of get_pred,
 first, prepare the new dataset of the Age, Sex, and Fatalism, that you want to predict,
@@ -112,9 +148,31 @@ new_X <- data.frame(Age = c(15, 29, 34), Sex = c(1, 0, 1), Fatalism = c(2, 0, 5)
 And your model is the output of generatreLinearModel, thus you can directly input to get_pred function
 ```
 new_Y <- get_pred(model,new_X)
+#OUTPUT:
+#>         [,1]
+#>[1,] 6.594197
+#>[2,] 4.259571
+#>[3,] 5.615474
 ```
 Thus, the value of new_Y is corresponding to the new_X that you input!
-   
+
+#Compare the efficients with R code
+
+```
+library(rbenchmark)
+data = LinearModelGenerator::data
+benchmark(LinearModelGenerator={
+           model = generate_linear_model(Depression~Age+Sex+Fatalism,data)
+         }, 
+         rcode = {
+           model =lm(Depression~Age+Sex+Fatalism, data = data)
+         }, 
+          replications = 500, columns = c("test", "replications", "elapsed", "relative", "user.self", "sys.self"))
+#OUTPUT:
+#>                  test  replications elapsed  relative user.self sys.self
+#>1 LinearModelGenerator  500          1.944    2.746     1.919    0.010
+#>2                rcode. 500          0.708    1.000     0.697    0.007
+```
    
    
    
