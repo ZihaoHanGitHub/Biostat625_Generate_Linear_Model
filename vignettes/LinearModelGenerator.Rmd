@@ -14,6 +14,66 @@ knitr::opts_chunk$set(
 )
 ```
 
+First of all, you can using this download command to download this packages and vignettes,
+```{r,eval=FALSE}
+devtools::install_github('ZihaoHanGitHub/Biostat625_Generate_Linear_Model',build_vignettes =T)
+```
+Secondly, you can using library to call out this package.
 ```{r setup}
 library(LinearModelGenerator)
+library(rbenchmark)
 ```
+\section{Dataset Setup}
+In this packages, it contain a dataset about depression, with four variables, Depression, Age, Sex, and Fatalism, it is common to use for a linear regression model calculating, thus, feel good to practice this packages via this dataset.
+```{r}
+data = LinearModelGenerator::data
+head(data)
+```
+We could see, this data frame contain 612 rows and 4 columns, with four vairables called Depression, Age, Sex and Fatalism, in this tutorial, this dataset is applied for all the example of function using.
+\section{Generate Linear Model}
+\subsection{How to use this function?}
+After we set up the data, we can using the generate linear model with a string (the formula of the model you want to fit), and the dataset, here is the example,
+```{r}
+# suppose you want to fit the linear model, explore the relationship between Depression with Age, Sex, and Fatalism.
+model = generate_linear_model(Depression ~ Age + Sex + Fatalism, data)
+```
+Thus, you would fit a multiple linear model by Least Squared Estimate, and all the information would save in the variable $model$, in the section of output, it would be introduce how to use this $model$.
+\subsection{What is this function output?}
+This function would return a list with five things, a mathematics express of this model, a coefficient table, a R squared table, a F-test table, a 95% confident interval of this table, and also a Sum of Sq table.
+\subsubsection{The Mathematics Formula & Coefficient Table}
+First of all, let's have a overview of this $model$.
+```{r}
+model
+```
+Then let's see how to call out each attribute.
+```{r}
+#Call out the mathematics formula
+#it would return a formula type data
+math_express = model$Mathematics_formula
+math_express
+```
+Then, let's check the coefficient table
+```{r}
+# the coefficient table is a dataframe class
+# contain these five columns name,
+# Estimate: the value of parameter
+# Std. Error: the standard error of parameter
+# t-value: the t-test value of this parameter
+# p-value: the p_value of the t test corresponding.
+coefficient_table = model$coefficients_table
+coefficient_table
+```
+And it is easily to call each colunms of coefficient table,
+```{r}
+# Example:
+# using the estimate value
+# for other attributes of coefficient table would be similar to call out.
+Estimate = coefficient_table[,"Estimate"]
+Estimate
+```
+\subsubsection{}
+
+
+
+
+
