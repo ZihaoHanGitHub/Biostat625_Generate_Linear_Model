@@ -10,11 +10,15 @@ You can use the command of devtools and github link to install this packages,
 ```
 devtools::install_github(ZihaoHanGitHub/Biostat625_Generate_Linear_Model)
 ```
-
-#generateLinearModel
+After the packages download, you can using the library to use this package!
+```
+library(LinearModelGenerator)
+```
+After the code complete, you can start to use this function!
+#GenerateLinearModel
 In this packages,it contains two function, and one dataset, this section is introduce the usage of these two functions, especially the input and output.
 generatorLinearModel is the functino help you to fitted your simple/multiple regression model by Least Squared Estimate.
-##INPUT
+##INPUT:
 ###S:
 A string, it is defined as a formula formatt, containing your response variable and dependent variables, example formatt:"Y~X1+X2+X3"
 ###Dataset:
