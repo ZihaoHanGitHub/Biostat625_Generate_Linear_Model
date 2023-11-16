@@ -115,7 +115,7 @@ generate_linear_model <- function(s,data){
         SSR = SSY - SSE
         dfR = (p-1)
         F_statistics = (SSR/dfR)/(MSE)
-        p_value = 1 - 2*pf(F_statistics, df1 = dfR, df2 = dfE)
+        p_value = 1 - pf(F_statistics, df1 = dfR, df2 = dfE)
         F_table = data.frame(
           F_statistics,
           dfR,

@@ -7,9 +7,9 @@
 This packages is design for the simple and multiple linear regression model, it contains a dataset about depression, a main functino to fit your model, a function to using your model that is fitted by the main function to predict or calculate on the new dataset.
 
 # Installation
-You can use the command of devtools and github link to install this packages,
+You can use the command of devtools and github link to install this packages, also the vignettes for tutorial.
 ```
-devtools::install_github(ZihaoHanGitHub/Biostat625_Generate_Linear_Model)
+devtools::install_github("ZihaoHanGitHub/Biostat625_Generate_Linear_Model",build_vignettes =T)
 ```
 After the packages download, you can using the library to use this package!
 ```
@@ -25,15 +25,15 @@ generatorLinearModel is the functino help you to fitted your simple/multiple reg
 ## INPUT:
 You need two input to use this generateLinearModel, one is the formula of your model, and another is your dataset.
 
-*S:* A string, it is defined as a formula formatt, containing your response variable and dependent variables, example formatt:"Y~X1+X2+X3"
+**S:** A string, it is defined as a formula formatt, containing your response variable and dependent variables, example formatt:"Y~X1+X2+X3"
 
-*Dataset:* A dataset containing all the variable you mentioned in your *S* (linear model formula), recommended do not containing *N.A*, and the length of each variable should be same.
+**Dataset:** A dataset containing all the variable you mentioned in your *S* (linear model formula), recommended do not containing *N.A*, and the length of each variable should be same.
 
 ## OUTPUT
 The function would return a data frame contain several information about your model.
 
 ### 0.Mathematics Formula:
-- *Mathematics express:* The model mathematics express.
+- **Mathematics express:** The model mathematics express.
 
 ### 1. Coefficient Table:
 - **Description:** Most of your model's coefficients are saved in this data frame.
@@ -41,7 +41,7 @@ The function would return a data frame contain several information about your mo
 - **Std. Error:** Standard Error of the estimated parameters.
 - **t value:** The t-value of each parameter, testing against the null hypothesis $\beta = 0$.
 - **Pr(>|t|):** P-value of each test, calculated with the degree of freedom $n-p$.
-- **Significance:** Significance level indicators: $.$ (under 0.1), $*$ (under 0.05), $**$ (under 0.01), $***$ (under 0).
+- **Significance:** Significance level indicators: $.$ for under 0.1, single start for under 0.05, double starts for under 0.01, triple stars for under 0.001.
 
 ### 2. Rsquared Table:
 - **Description:** Calculates $R^2$ and adjusted $R^2$.

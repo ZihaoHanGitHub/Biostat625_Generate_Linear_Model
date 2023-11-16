@@ -51,8 +51,10 @@ test_that("Main Function Work", {
   p_value = F_table[,"p_value"]
   F_table_true <- summary(model_lm)$fstatistic
   f_test_result <- anova(model_lm)
-  p_value_true <- f_test_result$"Pr(>F)"[1]
+  p_value_lm = pf(F_table_true[1], F_table_true[2], F_table_true[3], lower.tail = FALSE)
+  #p_value_lm <- f_test_result$"Pr(>F)"[1]
   expect_equal(t(F_table_sub), as.matrix(F_table_true))
+  expect_equal(p_value,as.numeric(p_value_lm))
 
   # confident_interval tetst
   CI = model_package$confident_interval
