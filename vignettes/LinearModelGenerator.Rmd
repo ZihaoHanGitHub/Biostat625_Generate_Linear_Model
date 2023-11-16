@@ -176,7 +176,7 @@ f_test_result = anova(model_lm)
 p_value_lm = pf(F_table_lm[1], F_table_lm[2], F_table_lm[3], lower.tail = FALSE)
 #Let's check whether they are same
 expect_equal(t(F_table_sub), as.matrix(F_table_lm))
-#expect_equal(p_value,as.numeric(p_value_lm))
+expect_equal(p_value,as.numeric(p_value_lm))
 ```
 \subsection{test the Sum Sq table}
 The F-table pass the test, it continues with the sum of squared table test
@@ -237,7 +237,7 @@ The test of generate_linear_model is already passed, it is neccessary to do the 
 new_X1 <- data.frame(Age = c(15, 29, 34), Sex = c(1, 0, 1), Fatalism = c(2, 0, 5))
 new_X2 <- data.frame(Age = c(11, 23, 39), Sex = c(0, 0, 1), Fatalism = c(3, 9, 10))
 new_X3 <- data.frame(Age = c(84, 24, 74), Sex = c(1, 1, 1), Fatalism = c(13, 6, 12))
-# Predict by get_pred and Orginial R function
+# Predict by get_pred and Original R function
 predict1 = get_pred(model,new_X1)
 predict_lm1 = predict(model_lm, newdata = new_X1)
 predict2 = get_pred(model,new_X2)
@@ -245,26 +245,37 @@ predict_lm2 = predict(model_lm, newdata = new_X2)
 predict3 = get_pred(model,new_X3)
 predict_lm3 = predict(model_lm, newdata = new_X3)
 ```
-The value is already caluclated, let's check whether they are same!
+The value is already calculated, let's check whether they are same!
 ```{r}
-# check whether, they are same
-expect_equal(predict1, as.matrix(predict_lm1),check.attributes = FALSE)
-expect_equal(predict2, as.matrix(predict_lm2),check.attributes = FALSE)
-expect_equal(predict3, as.matrix(predict_lm3),check.attributes = FALSE)
+# check whether, they are same on value
+expect_equal(predict1, as.matrix(predict_lm1),ignore_attr = TRUE)
+expect_equal(predict2, as.matrix(predict_lm2),ignore_attr = TRUE)
+expect_equal(predict3, as.matrix(predict_lm3),ignore_attr = TRUE)
 ```
 \subsection{Compare the efficient with Original R function}
 It would be better using the rbenchmark to compare the speed of function by same dataset and argument.
 ```{r}
-
 # Checking the generate_linear_model() vs. lm()
 # repeating 500 times
 benchmark(LinearModelGenerator={
            model_packages = generate_linear_model(Depression~Age+Sex+Fatalism,data)
          }, 
-         rcode = {
+         OriginalRCode = {
            model_lm =lm(Depression~Age+Sex+Fatalism, data = data)
          }, 
           replications = 500, columns = c("test", "replications", "elapsed", "relative", "user.self", "sys.self"))
 ```
-
-
+Let's continue check the speed of get_pred() function compare to the predict(),
+```{r}
+# Checking the get_pred() vs. prediction()
+# repeating 500 times
+subdata = data[,c("Age","Sex","Fatalism")]
+benchmark(Get_Predict={
+           Y = get_pred(model,subdata)
+         }, 
+         OriginalRCode = {
+           Y_lm =predict(model_lm, newdata = subdata)
+         }, 
+          replications = 500, columns = c("test", "replications", "elapsed", "relative", "user.self", "sys.self"))
+```
+Overall, the speed of get_pred() function is faster than original R code, but the generate_linear_model() is slower than the R code, maybe it is because I integrated many outputs as my final return in the function. During the execution of this function, it processes a much larger amount of output compared to the original R code.

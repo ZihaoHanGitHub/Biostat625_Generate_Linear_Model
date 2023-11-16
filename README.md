@@ -4,7 +4,8 @@
 [![codecov](https://codecov.io/gh/ZihaoHanGitHub/Biostat625_Generate_Linear_Model/graph/badge.svg?token=2X8Z7I7TPR)](https://codecov.io/gh/ZihaoHanGitHub/Biostat625_Generate_Linear_Model)
 
 <!-- badges: end -->
-This packages is design for the simple and multiple linear regression model, it contains a dataset about depression, a main functino to fit your model, a function to using your model that is fitted by the main function to predict or calculate on the new dataset.
+**WELCOME**
+This packages is design for the simple and multiple linear regression model, it contains a dataset about depression, a main functino to fit your model, a function to using your model that is fitted by the main function to predict or calculate on the new data set.
 
 # Installation
 You can use the command of devtools and github link to install this packages, also the vignettes for tutorial.
@@ -157,24 +158,38 @@ new_Y <- get_pred(model,new_X)
 Thus, the value of new_Y is corresponding to the new_X that you input!
 
 #Compare the efficients with R code
-
+Let's compare packages speed vs. the original R code:
 ```
 library(rbenchmark)
 data = LinearModelGenerator::data
 benchmark(LinearModelGenerator={
            model = generate_linear_model(Depression~Age+Sex+Fatalism,data)
          }, 
-         rcode = {
+         OriginalRCode = {
            model =lm(Depression~Age+Sex+Fatalism, data = data)
          }, 
           replications = 500, columns = c("test", "replications", "elapsed", "relative", "user.self", "sys.self"))
 #OUTPUT:
 #>                  test  replications elapsed  relative user.self sys.self
 #>1 LinearModelGenerator  500          1.944    2.746     1.919    0.010
-#>2                rcode. 500          0.708    1.000     0.697    0.007
+#>2        OriginalRCode  500          0.708    1.000     0.697    0.007
 ```
-   
-   
+```
+subdata = data[,c("Age","Sex","Fatalism")]
+benchmark(Get_Predict={
+           Y = get_pred(model,subdata)
+         }, 
+         OriginalRCode = {
+           Y_lm =predict(model_lm, newdata = subdata)
+         }, 
+          replications = 500, columns = c("test", "replications", "elapsed", "relative", "user.self", "sys.self"))
+#OUTPUT:
+#>                   test replications elapsed relative user.self sys.self
+#> 1          Get_Predict 500          2.038    2.739     1.942    0.026
+#> 2        OriginalRCode 500          0.744    1.000     0.698    0.032
+```
+Therefore, the speed of get_pred() function is faster than original R code, but the generate_linear_model() is slower than the R code, maybe it is because I integrated many outputs as my final return in the function. During the execution of this function, it processes a much larger amount of output compared to the original R code.
+For the correctness check, it would be helpful to see the vignettes document!
    
    
    
