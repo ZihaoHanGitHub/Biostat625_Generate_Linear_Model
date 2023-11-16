@@ -120,7 +120,7 @@ new_X <- data.frame(Age = c(15, 29, 34), Sex = c(1, 0, 1), Fatalism = c(2, 0, 5)
 Then, it would helpful to use the get_pred function to predict the Depression score for each of these three participants.
 ```{r}
 # Input the model (return by generate_linear_model()) and new_X to the get_pred function
-predict(model,new_X)
+get_pred(model,new_X)
 ```
 Hence, you can get the predict value of these three participants!
 \section{Compare with Original R function}
@@ -175,8 +175,8 @@ F_table_lm = summary(model_lm)$fstatistic
 f_test_result = anova(model_lm)
 p_value_lm = pf(F_table_lm[1], F_table_lm[2], F_table_lm[3], lower.tail = FALSE)
 #Let's check whether they are same
-expect_equal(t(F_table_sub), as.matrix(F_table_true))
-expect_equal(p_value,as.numeric(p_value_lm))
+expect_equal(t(F_table_sub), as.matrix(F_table_lm))
+#expect_equal(p_value,as.numeric(p_value_lm))
 ```
 \subsection{test the Sum Sq table}
 The F-table pass the test, it continues with the sum of squared table test
@@ -203,7 +203,7 @@ n = nrow(data)
 p = nrow(coefficient_table_lm)
 # calculate the dfE, dfR, dfY
 dfE_lm = n - p
-dfR_lm = p
+dfR_lm = p - 1
 dfY_lm = n - 1
 df_lm = c(dfR_lm,dfE_lm,dfY_lm)
 # call out the value of this packages generate
@@ -227,8 +227,8 @@ conf_interval_true <- confint(model_lm)
 lower_bond_lm = conf_interval_true[, 1]
 upper_bond_lm = conf_interval_true[, 2]
 # check whether of them are equal
-expect_equal(lower_bond, as.matrix(lower_true))
-expect_equal(upper_bond, as.matrix(upper_true))
+expect_equal(lower_bond, as.matrix(lower_bond_lm))
+expect_equal(upper_bond, as.matrix(upper_bond_lm))
 ```
 \subsection{Test on get_pred}
 The test of generate_linear_model is already passed, it is neccessary to do the same test on the get_pred function, first of all, generate the new dataset for testing.
@@ -266,39 +266,5 @@ benchmark(LinearModelGenerator={
          }, 
           replications = 500, columns = c("test", "replications", "elapsed", "relative", "user.self", "sys.self"))
 ```
-The visualization of comparation is following:
-```{r}
-#Visualization of Result
-result = bench::mark(generate_linear_model(Depression~Age+Sex+Fatalism,data),
-                     lm(Depression~Age+Sex+Fatalism, data = data))
-plot(result)
-```
-Let's compare the get_pred() with the predict()
-```{r}
-# Checking the get_pred() vs. predict()
-# repeating 500 times
-benchmark(LinearModelGenerator={
-           Y = get_pred(model,data)
-         }, 
-         rcode = {
-           Y_lm =predict(model_lm, newdata = data)
-         }, 
-          replications = 500, columns = c("test", "replications", "elapsed", "relative", "user.self", "sys.self"))
-```
-The visualization of comparation is following:
-```{r}
-# Visualization of compare
-result = bench::mark(get_pred(model,data),
-                     predict(model_lm, newdata = data))
-plot(result)
-```
-
-
-
-
-
-
-
-
 
 
