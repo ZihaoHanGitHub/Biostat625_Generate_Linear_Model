@@ -5,6 +5,7 @@
 
 <!-- badges: end -->
 **WELCOME**
+
 This packages is design for the simple and multiple linear regression model, it contains a dataset about depression, a main functino to fit your model, a function to using your model that is fitted by the main function to predict or calculate on the new data set.
 
 # Installation
@@ -183,10 +184,10 @@ benchmark(Get_Predict={
            Y_lm =predict(model_lm, newdata = subdata)
          }, 
           replications = 500, columns = c("test", "replications", "elapsed", "relative", "user.self", "sys.self"))
-#OUTPUT:
-#>                   test replications elapsed relative user.self sys.self
-#> 1          Get_Predict 500          2.038    2.739     1.942    0.026
-#> 2        OriginalRCode 500          0.744    1.000     0.698    0.032
+#> OUTPUT:
+#>            test replications elapsed relative user.self sys.self
+#> 1   Get_Predict          500   0.360    1.000     0.325        0
+#> 2 OriginalRCode          500   0.374    1.039     0.365        0
 ```
 Therefore, the speed of get_pred() function is faster than original R code, but the generate_linear_model() is slower than the R code, maybe it is because I integrated many outputs as my final return in the function. During the execution of this function, it processes a much larger amount of output compared to the original R code.
 For the correctness check, it would be helpful to see the vignettes document!
