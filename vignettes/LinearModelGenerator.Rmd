@@ -22,7 +22,6 @@ Secondly, you can using library to call out this package.
 ```{r setup}
 library(LinearModelGenerator)
 library(rbenchmark)
-library(bench)
 ```
 In this tutorial, it is divided into four parts: 
 \begin{itemize}

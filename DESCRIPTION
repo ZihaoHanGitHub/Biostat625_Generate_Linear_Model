@@ -11,11 +11,10 @@ LazyData: true
 Data: 
     LinearModelDataset
 Imports:
+    rbenchmark,
     stats
 Suggests: 
     covr,
-    rbenchmark,
-    bench,
     knitr,
     rmarkdown,
     testthat (>= 3.0.0)
