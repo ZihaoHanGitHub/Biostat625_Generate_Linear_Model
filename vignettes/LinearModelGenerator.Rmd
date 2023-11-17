@@ -13,7 +13,7 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 ```
-
+# WELCOME
 First of all, you can using this download command to download this packages and vignettes,
 ```{r,eval=FALSE}
 devtools::install_github('ZihaoHanGitHub/Biostat625_Generate_Linear_Model',build_vignettes =T)
@@ -24,21 +24,26 @@ library(LinearModelGenerator)
 library(rbenchmark)
 ```
 In this tutorial, it is divided into four parts: 
-\begin{itemize}
-  \item \textbf{\textit{ Data set Setup:}},for using the data set in this package;
-  \item \textbf{\textit{ Generate Linear Model:}}, for using the generate_linear_model() function to fit the model with your argument and data set;
-  \item \textbf{\textit{Get Prediction:}},for using the get_pred() function to calculate the response variable value for the new dataset, especially for unknown response variable;
-  \item \textbf{\textit{Compare the packages with orginal R function:}},this section we using the function inside the packages compare with the R function, compare them with correctness and efficient. 
-\end{itemize} 
-\section{Dataset Setup}
+
+- **_Data set Setup:_**: For using the data set in this package;
+- **_Generate Linear Model:_**: For using the `generate_linear_model()` function to fit the model with your argument and data set;
+- **_Get Prediction:_**: For using the `get_pred()` function to calculate the response variable value for the new dataset, especially for an unknown response variable;
+- **_Compare the packages with original R function:_**: In this section, we use the functions inside the packages to compare with the R function, assessing them for correctness and efficiency.
+
+# Dataset Setup
 In this packages, it contain a dataset about depression, with four variables, Depression, Age, Sex, and Fatalism, it is common to use for a linear regression model calculating, thus, feel good to practice this packages via this dataset.
 ```{r}
 data = LinearModelGenerator::data
 head(data)
 ```
 We could see, this data frame contain 612 rows and 4 columns, with four vairables called Depression, Age, Sex and Fatalism, in this tutorial, this dataset is applied for all the example of function using.
-\section{Generate Linear Model}
-\subsection{How to use this function?}
+
+# Generate Linear Model
+
+This function is designed by vector operation to speed up the calculation, and aim to solve the multiple linear regression model, hypothesis testing, and several information related to the MLR.
+
+## How to use this function?
+
 After we set up the data, we can using the generate linear model with a string (the formula of the model you want to fit), and the dataset, here is the example,
 ```{r}
 # suppose you want to fit the linear model, 
@@ -46,9 +51,13 @@ After we set up the data, we can using the generate linear model with a string (
 model = generate_linear_model(Depression ~ Age + Sex + Fatalism, data)
 ```
 Thus, you would fit a multiple linear model by Least Squared Estimate, and all the information would save in the variable $model$, in the section of output, it would be introduce how to use this $model$.
-\subsection{What is this function output?}
+
+## What is this function output?
+
 This function would return a list with five things, a mathematics express of this model, a coefficient table, a R squared table, a F-test table, a 95% confident interval of this table, and also a Sum of Sq table.
-\subsubsection{The Mathematics Formula & Coefficient Table}
+
+### The Mathematics Formula & Coefficient Table
+
 First of all, let's have a overview of this $model$.
 ```{r}
 model
@@ -79,7 +88,9 @@ And it is easily to call each colunms of coefficient table,
 Estimate = coefficient_table[,"Estimate"]
 Estimate
 ```
-\subsubsection{SS table, $R^2$table,& F-test table}
+
+### SS table, $R^2$table,& F-test table
+
 This part is introduce how to call the SS table, $R^2$ table and F-test table of the model, first, it is going to introduce the Sum Sq table, For Sum Sq table, you can applied this command
 ```{r}
 # call out SS_table
@@ -96,10 +107,12 @@ In the end of this section, it introduce how to call the F-test table, which is 
 F_table = model$F_table
 F_table
 ```
-\subsubsection{Confidence Interval}
-This section is going to introduce about the 95%CI of each parameter, you can call out this dataframe by the code following:
+
+### Confidence Interval
+
+This section is going to introduce about the 95%CI of each parameter, you can call out this data frame by the code following:
 ```{r}
-# CI is the dataframe type
+# CI is the data frame type
 CI = model$confident_interval
 CI
 ```
@@ -110,8 +123,11 @@ CI[,"confident_interval_upper"]
 #Call the 95% confidence interval for intercept
 CI["(Intercept)",]
 ```
-\section{get Prediction}
+
+## get Prediction
+
 This function is designed for predicting the value of new dataset by the model you already fitted by the generate_linear_model, for example, for the code above, we already explore the relationship between Depression with Age, Sex, and Fatalism, if there is three participants with their Age, Sex, and Fatalism score, how can ewe predict the depression to each of them? Let's generate the new dataset first,
+
 ```{r}
 # generate three participants information, make it a dataframe, called new_X
 new_X <- data.frame(Age = c(15, 29, 34), Sex = c(1, 0, 1), Fatalism = c(2, 0, 5))
@@ -122,7 +138,9 @@ Then, it would helpful to use the get_pred function to predict the Depression sc
 get_pred(model,new_X)
 ```
 Hence, you can get the predict value of these three participants!
-\section{Compare with Original R function}
+
+# Compare with Original R function
+
 Proof this package valid is necessary to compare with the original R function, each parts of function output would be compare to the original function.
 First of all the test, let's fit a linear model by orginal R function.
 ```{r}
@@ -131,7 +149,9 @@ model_lm = lm(Depression ~ Age + Sex + Fatalism, data=data)
 summary_lm = summary(model_lm)
 summary_lm
 ```
-\subsection{Test the coefficient table}
+
+## Test the coefficient table
+
 ```{r}
 # We already see that the significant level of each parameter are same
 # let's check other estimate, Std. Error, t value, and p-value
@@ -147,7 +167,9 @@ Let's check whether they are same:
 library(testthat)
 expect_equal(coefficients,coefficient_table_lm)
 ```
-\subsection{Test the R squared table}
+
+## Test the R squared table
+
 For coefficient table and significant level check, it pass all of the value check, let's go ahead to check the $R^2$ table.
 ```{r}
 # generate the R square and adj R square of package
@@ -162,7 +184,9 @@ Now, check whether they are same,
 expect_equal(R_squared,R_squared_lm)
 expect_equal(adjR_squared,adj_r_squared_lm)
 ```
-\subsection{Test the F-test}
+
+## Test the F-test
+
 From the R squared test part, it already pass the checking, it continued with F-table check
 ```{r}
 # lets convert the F-table to the R original function format
@@ -177,7 +201,9 @@ p_value_lm = pf(F_table_lm[1], F_table_lm[2], F_table_lm[3], lower.tail = FALSE)
 expect_equal(t(F_table_sub), as.matrix(F_table_lm))
 expect_equal(p_value,as.numeric(p_value_lm))
 ```
-\subsection{test the Sum Sq table}
+
+## test the Sum Sq table
+
 The F-table pass the test, it continues with the sum of squared table test
 ```{r}
 # Let's calculate the Sum Sq table of R original Function
@@ -210,7 +236,9 @@ df = SS_table$df
 expect_equal(df,df_lm)
 ```
 Since the $MSE =\frac{SSE}{dfE}$,$MSR =\frac{SSR}{dfR}$, and $MSY =\frac{SSY}{dfY}$, all of the SSE,SSY,SSR and the degree of freedom of each of them pass the value test, the MSE, MSY, MSR would be same.
-\subsection{Test the Confidence Interval}
+
+## Test the Confidence Interval
+
 Since the SS table pass the check, there are only one part in generate linear model functino left for testing, let's continue to test the confidence interval (on .95 confidence).
 ```{r}
 # call the lower bound and upper bound
@@ -229,7 +257,9 @@ upper_bond_lm = conf_interval_true[, 2]
 expect_equal(lower_bond, as.matrix(lower_bond_lm))
 expect_equal(upper_bond, as.matrix(upper_bond_lm))
 ```
-\subsection{Test on get_pred}
+
+## Test on get_pred 
+
 The test of generate_linear_model is already passed, it is neccessary to do the same test on the get_pred function, first of all, generate the new dataset for testing.
 ```{r}
 # generate the new data frame containing the Age, Sex, and Fatalism
@@ -251,7 +281,9 @@ expect_equal(predict1, as.matrix(predict_lm1),ignore_attr = TRUE)
 expect_equal(predict2, as.matrix(predict_lm2),ignore_attr = TRUE)
 expect_equal(predict3, as.matrix(predict_lm3),ignore_attr = TRUE)
 ```
-\subsection{Compare the efficient with Original R function}
+
+## Compare the efficient with Original R function
+
 It would be better using the rbenchmark to compare the speed of function by same dataset and argument.
 ```{r}
 # Checking the generate_linear_model() vs. lm()
