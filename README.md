@@ -19,6 +19,10 @@ library(LinearModelGenerator)
 ```
 After the code complete, you can start to use this function!
 
+For the tutorial, you can also check the vignettes, run the code below
+```
+browseVignettes("LinearModelGenerator")
+```
 
 # GenerateLinearModel
 In this packages,it contains two function, and one dataset, this section is introduce the usage of these two functions, especially the input and output.
